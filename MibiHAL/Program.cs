@@ -34,9 +34,10 @@ namespace MibiHAL
 
             Console.WriteLine("Trained!");
 
+            var starterWord = words[r.Next(words.Length)];
             for (int i = 0; i < 10; i++)
             {
-                var starter = new Chain(words[r.Next(words.Length)]);
+                var starter = new Chain(starterWord);
 
                 var output = starter.First(1);
 
