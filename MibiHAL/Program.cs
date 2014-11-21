@@ -29,7 +29,7 @@ namespace MibiHAL
 
                 var output = chainBuilder.BuildChain(starter);
 
-                Console.WriteLine(string.Join("", output.Symbols));
+                Console.WriteLine(Prettifier.Prettify(string.Join("", output.Symbols)));
             }
         }
 
