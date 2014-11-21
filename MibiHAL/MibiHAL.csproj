@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Brain.cs" />
     <Compile Include="Chain.cs" />
+    <Compile Include="ChainBuilder.cs" />
     <Compile Include="ISymbol.cs" />
     <Compile Include="NonWord.cs" />
     <Compile Include="Parse.cs" />
