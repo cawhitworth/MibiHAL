@@ -12,4 +12,4 @@ word-nonword-word, or nonword-word-nonword.
 By default, it builds 3-grams and 5-grams from the corpus, and only searches for potential n-grams starting with a single
 word, but there's no reason this couldn't be extended.
 
-At the moment, it loads the corpus, trains itself, and then generates 10 random sentences.
+At the moment, it loads the corpus, trains itself, and then generates 10 random sentences based on a seed word picked at random from the corpus. Generation proceeds both forwards and backwards from the seed word to other symbols marked as either starter or terminal.
