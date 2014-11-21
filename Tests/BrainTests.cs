@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 using MibiHAL;
 using NUnit.Framework;
 
@@ -30,14 +31,14 @@ namespace Tests
         }
 
         [Test]
-        public void Candidates()
+        public void ForwardCandidates()
         {
             var the = new Word("the");
             var space = new NonWord(" ", false);
             var best = new Word("best");
             var worst = new Word("worst");
 
-            var candidates = m_Brain.Candidates(new Chain(the));
+            var candidates = m_Brain.ForwardCandidates(new Chain(the));
 
             Assert.That(candidates, Is.EquivalentTo( new []
             {
@@ -47,19 +48,38 @@ namespace Tests
         }
 
         [Test]
-        public void CandidatesTerminal()
+        public void ForwardCandidatesTerminal()
         {
             var times = new Word("times");
             var comma_space = new NonWord(", ", false);
             var it = new Word("it");
             var fullstop = new NonWord(".", true);
 
-            var candidates = m_Brain.Candidates(new Chain(times));
+            var candidates = m_Brain.ForwardCandidates(new Chain(times));
 
             Assert.That(candidates, Is.EquivalentTo( new []
             {
                 new Chain(times, comma_space, it),
                 new Chain(times, fullstop)
+            }));
+        }
+
+        [Test]
+        public void BackwardsCandidates()
+        {
+            var of = new Word("of");
+            var space = new NonWord(" ", false);
+
+            var best = new Word("best");
+            var worst = new Word("worst");
+
+            var candidates = m_Brain.BackwardsCandidates(new Chain(of));
+
+            Assert.That(candidates, Is.EquivalentTo( new[]
+            {
+                new Chain(best, space, of),
+                new Chain(worst, space, of),
+
             }));
         }
     }

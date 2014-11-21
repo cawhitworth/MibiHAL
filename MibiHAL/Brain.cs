@@ -23,8 +23,9 @@ namespace MibiHAL
         }
 
         private readonly Dictionary<Chain, IEnumerable<Chain>> m_StartsWith = new Dictionary<Chain, IEnumerable<Chain>>(); 
+        private readonly Dictionary<Chain, IEnumerable<Chain>> m_EndsWith = new Dictionary<Chain, IEnumerable<Chain>>(); 
 
-        public IEnumerable<Chain> Candidates(Chain start)
+        public IEnumerable<Chain> ForwardCandidates(Chain start)
         {
             if (!m_StartsWith.ContainsKey(start))
             {
@@ -32,6 +33,16 @@ namespace MibiHAL
             }
 
             return m_StartsWith[start];
+        }
+
+        public IEnumerable<Chain> BackwardsCandidates(Chain end)
+        {
+            if (!m_EndsWith.ContainsKey(end))
+            {
+                m_EndsWith[end] = Chains().Where(c => c.EndsWith(end));
+            }
+
+            return m_EndsWith[end];
         }
 
         public IEnumerable<Chain> Chains()
@@ -55,7 +66,8 @@ namespace MibiHAL
                 // Warm the candidates cache
                 foreach (var count in Enumerable.Range(0, order - 1))
                 {
-                    Candidates(slice.First(count));
+                    ForwardCandidates(slice.First(count));
+                    BackwardsCandidates(slice.Last(count));
                 }
             }
         }
@@ -67,5 +79,6 @@ namespace MibiHAL
 
             return m_Chains[chain];
         }
+
     }
 }

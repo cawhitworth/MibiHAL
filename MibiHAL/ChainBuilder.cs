@@ -20,7 +20,7 @@ namespace MibiHAL
 
             do
             {
-                var candidates = m_Brain.Candidates(starter);
+                var candidates = m_Brain.ForwardCandidates(starter);
 
                 var chain = PickChain(candidates);
 
