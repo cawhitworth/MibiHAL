@@ -16,19 +16,35 @@ namespace MibiHAL
 
         public Chain BuildChain(Chain starter)
         {
+
+            var next = starter;
+
             var output = starter.First(1);
 
             do
             {
-                var candidates = m_Brain.ForwardCandidates(starter);
+                var forwardCandidates = m_Brain.ForwardCandidates(next);
 
-                var chain = PickChain(candidates);
+                var chain = PickChain(forwardCandidates);
 
                 output = output.Join(chain.Last(chain.Length - 1));
 
-                starter = chain.Last(1);
+                next = chain.Last(1);
             
-            } while (!starter.Symbols.Last().Terminal);
+            } while (!next.Symbols.Last().Terminal);
+
+            next = starter;
+            do
+            {
+                var backwardCandidates = m_Brain.BackwardsCandidates(next);
+
+                var chain = PickChain(backwardCandidates);
+
+                output = chain.First(chain.Length - 1).Join(output);
+
+                next= chain.First(1);
+            
+            } while (!next.Symbols.First().Starter);
 
             return output;
         }
