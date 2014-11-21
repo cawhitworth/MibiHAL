@@ -18,6 +18,8 @@ namespace MibiHAL
             var state = State.Starting;
             string symbol = string.Empty;
 
+            bool firstWord = true;
+
             foreach (char chr in toParse)
             {
                 var c = char.ToLowerInvariant(chr);
@@ -35,10 +37,11 @@ namespace MibiHAL
                         }
                         else
                         {
-                            yield return new Word(symbol);
+                            yield return new Word(symbol, firstWord);
                             symbol = string.Empty;
                             symbol += c;
                             state = State.InNonWord;
+                            firstWord = false;
                         }
                         break;
                     case State.InNonWord:
