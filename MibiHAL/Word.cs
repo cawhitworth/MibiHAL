@@ -2,17 +2,19 @@
 {
     public class Word : ISymbol
     {
+        private readonly bool m_Starter;
         private readonly int m_HashCode;
 
-        public Word(string word)
+        public Word(string word, bool starter = false)
         {
+            m_Starter = starter;
             Value = word.ToLowerInvariant();
-            Terminal = false;
             m_HashCode = Value.GetHashCode();
         }
 
         public string Value { get; private set; }
-        public bool Terminal { get; private set; }
+        public bool Terminal { get { return false; }}
+        public bool Starter { get { return m_Starter; } }
 
         public override string ToString()
         {

@@ -1,18 +1,27 @@
-﻿namespace MibiHAL
+﻿using System.Dynamic;
+
+namespace MibiHAL
 {
     public class NonWord : ISymbol
     {
         private readonly int m_HashCode;
+        private readonly bool m_Terminal;
 
         public NonWord(string nonword, bool terminal)
         {
             Value = nonword;
-            Terminal = terminal;
+            m_Terminal = terminal;
             m_HashCode = Value.GetHashCode() ^ (397 * Terminal.GetHashCode());
         }
 
         public string Value { get; private set; }
-        public bool Terminal { get; private set; }
+
+        public bool Terminal
+        {
+            get { return m_Terminal; }
+        }
+
+        public bool Starter { get { return false; } }
 
         public override string ToString()
         {
