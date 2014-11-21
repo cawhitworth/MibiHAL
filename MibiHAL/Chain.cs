@@ -8,15 +8,18 @@ namespace MibiHAL
     public class Chain
     {
         private readonly IEnumerable<ISymbol> m_Symbols;
+        private readonly int m_HashCode;
 
         public Chain(IEnumerable<ISymbol> symbols)
         {
-            m_Symbols = symbols;
+            m_Symbols = symbols as ISymbol[] ?? symbols.ToArray();
+            m_HashCode = Symbols.Aggregate(0, (current, symbol) => current ^ 397*symbol.GetHashCode());
         }
 
         public Chain(params ISymbol[] symbols)
         {
-            m_Symbols = symbols;
+            m_Symbols = symbols as ISymbol[] ?? symbols.ToArray();
+            m_HashCode = Symbols.Aggregate(0, (current, symbol) => current ^ 397*symbol.GetHashCode());
         }
 
         public int Length
@@ -33,12 +36,12 @@ namespace MibiHAL
 
         public Chain First(int count)
         {
-            return new Chain(Symbols.TakeWhile((s, i) => i < count));
+            return new Chain(Symbols.Take(count));
         }
 
         public Chain Last(int count)
         {
-            return new Chain(Symbols.Reverse().TakeWhile((s, i) => i < count).Reverse());
+            return new Chain(Symbols.Skip(Length - count).Take(count));
         }
 
         public bool StartsWith(Chain chain)
@@ -64,13 +67,12 @@ namespace MibiHAL
 
         public Chain Slice(int start, int count)
         {
-            return new Chain(Last(Length - start).Symbols.TakeWhile((s, i) => i < count));
+            return new Chain(Symbols.Skip(start).Take(count));
         }
 
         public override int GetHashCode()
         {
-            var hash = Symbols.Aggregate(0, (current, symbol) => current ^ 397*symbol.GetHashCode());
-            return hash;
+            return m_HashCode;
         }
 
         public override bool Equals(object obj)

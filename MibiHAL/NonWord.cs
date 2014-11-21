@@ -2,10 +2,13 @@
 {
     public class NonWord : ISymbol
     {
+        private readonly int m_HashCode;
+
         public NonWord(string nonword, bool terminal)
         {
             Value = nonword;
             Terminal = terminal;
+            m_HashCode = Value.GetHashCode() ^ (397 * Terminal.GetHashCode());
         }
 
         public string Value { get; private set; }
@@ -31,7 +34,7 @@
 
         public override int GetHashCode()
         {
-            return Value.GetHashCode() ^ (397 * Terminal.GetHashCode());
+            return m_HashCode;
         }
     }
 }

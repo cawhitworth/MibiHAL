@@ -16,6 +16,17 @@ namespace Tests
         }
 
         [Test]
+        public void Last()
+        {
+            var space = new NonWord(" ", false);
+            var expected = new Chain(
+                new Word("of"), space,
+                new Word("times"), new NonWord(".", true));
+
+            Assert.That(m_Chain.Last(4), Is.EqualTo(expected));
+        }
+
+        [Test]
         public void Slice()
         {
             Assert.That(m_Chain.Slice(4, 3), Is.EqualTo(new Chain(
@@ -37,12 +48,13 @@ namespace Tests
 
         public void EndsWith()
         {
-            Assert.That(m_Chain.EndsWith(new Chain(
+            var chain = new Chain(
                 new NonWord(" ", false),
                 new Word("times"),
                 new NonWord(".", true)
-            )), Is.True);
-        }
+                );
 
+            Assert.That(m_Chain.EndsWith(chain));
+        }
     }
 }

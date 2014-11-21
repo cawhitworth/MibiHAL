@@ -2,10 +2,13 @@
 {
     public class Word : ISymbol
     {
+        private readonly int m_HashCode;
+
         public Word(string word)
         {
             Value = word.ToLowerInvariant();
             Terminal = false;
+            m_HashCode = Value.GetHashCode();
         }
 
         public string Value { get; private set; }
@@ -31,7 +34,7 @@
 
         public override int GetHashCode()
         {
-            return Value.GetHashCode();
+            return m_HashCode;
         }
     }
 }
