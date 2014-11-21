@@ -7,19 +7,17 @@ namespace MibiHAL
 {
     public class Chain
     {
-        private readonly IEnumerable<ISymbol> m_Symbols;
-        private readonly int m_HashCode;
+        private readonly ISymbol[] m_Symbols;
+        private int m_HashCode = -1;
 
         public Chain(IEnumerable<ISymbol> symbols)
         {
             m_Symbols = symbols as ISymbol[] ?? symbols.ToArray();
-            m_HashCode = Symbols.Aggregate(0, (current, symbol) => current ^ 397*symbol.GetHashCode());
         }
 
         public Chain(params ISymbol[] symbols)
         {
-            m_Symbols = symbols as ISymbol[] ?? symbols.ToArray();
-            m_HashCode = Symbols.Aggregate(0, (current, symbol) => current ^ 397*symbol.GetHashCode());
+            m_Symbols = symbols;
         }
 
         public int Length
@@ -72,6 +70,9 @@ namespace MibiHAL
 
         public override int GetHashCode()
         {
+            // Memoize the hashcode
+            if (m_HashCode == -1)
+                m_HashCode = Symbols.Aggregate(0, (current, symbol) => current ^ 397*symbol.GetHashCode());
             return m_HashCode;
         }
 

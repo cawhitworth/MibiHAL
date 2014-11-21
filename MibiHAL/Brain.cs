@@ -52,7 +52,11 @@ namespace MibiHAL
                 var slice = chain.Slice(offset, sliceSize);
                 Add(slice);
 
-                Candidates(slice.First(1));
+                // Warm the candidates cache
+                foreach (var count in Enumerable.Range(0, order - 1))
+                {
+                    Candidates(slice.First(count));
+                }
             }
         }
 
