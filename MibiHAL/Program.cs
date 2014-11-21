@@ -21,8 +21,13 @@ namespace MibiHAL
 
             Console.WriteLine("Trained!");
 
+            Console.WriteLine();
+
             var starterWord = words[r.Next(words.Length)];
             
+            Console.WriteLine("Seed word: {0}", starterWord);
+            Console.WriteLine();
+
             for (int i = 0; i < 10; i++)
             {
                 var starter = new Chain(starterWord);
@@ -30,6 +35,7 @@ namespace MibiHAL
                 var output = chainBuilder.BuildChain(starter);
 
                 Console.WriteLine(Prettifier.Prettify(string.Join("", output.Symbols)));
+                Console.WriteLine();
             }
         }
 

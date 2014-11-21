@@ -26,12 +26,12 @@ namespace MibiHAL
                 switch (state)
                 {
                     case State.Starting:
-                        state = IsWordChar(c) ? State.InWord : State.InNonWord;
+                        state = CharacterClassifier.IsWordChar(c) ? State.InWord : State.InNonWord;
                         symbol += c;
                         break;
 
                     case State.InWord:
-                        if (IsWordChar(c))
+                        if (CharacterClassifier.IsWordChar(c))
                         {
                             symbol += c;
                         }
@@ -45,7 +45,7 @@ namespace MibiHAL
                         }
                         break;
                     case State.InNonWord:
-                        if (IsNonWordChar(c))
+                        if (CharacterClassifier.IsNonWordChar(c))
                         {
                             symbol += c;
                         }
@@ -75,14 +75,21 @@ namespace MibiHAL
                 yield return new NonWord(symbol, true);
             }
         }
+    }
 
-
-        private static bool IsWordChar(char c)
+    class CharacterClassifier
+    {
+        public static bool IsCapitalisingPunctuation(char c)
         {
-            return char.IsLetterOrDigit(c) || c == '\'';
+            return c == '!' || c == '.' || c == '?';
         }
 
-        private static bool IsNonWordChar(char c)
+        public static bool IsWordChar(char c)
+        {
+            return Char.IsLetterOrDigit(c) || c == '\'';
+        }
+
+        public static bool IsNonWordChar(char c)
         {
             return !IsWordChar(c);
         }
