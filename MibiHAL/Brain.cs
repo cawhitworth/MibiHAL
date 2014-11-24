@@ -17,6 +17,24 @@ namespace MibiHAL
         {
         }
 
+        public Dictionary<int, int> Scores
+        {
+            get
+            {
+                var result = new Dictionary<int, int>();
+                foreach (var chain in m_Chains)
+                {
+                    var score = chain.Value;
+                    if (!result.ContainsKey(score))
+                    {
+                        result[score] = 0;
+                    }
+                    result[score]++;
+                }
+                return result;
+            }
+        }
+
         public IEnumerable<ISymbol> Symbols
         {
             get
