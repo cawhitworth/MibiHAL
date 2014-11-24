@@ -56,8 +56,6 @@ namespace MibiHAL
             return Last(enumerable.Count()).Symbols.Zip(enumerable, (s1, s2) => s1.Equals(s2)).All(eq => eq);
         }
 
-        public int Score { get; set; }
-
         public IEnumerable<ISymbol> Symbols
         {
             get { return m_Symbols; }

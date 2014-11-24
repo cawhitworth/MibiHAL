@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
@@ -81,6 +82,20 @@ namespace Tests
                 new Chain(worst, space, of),
 
             }));
+        }
+
+        [Test]
+        public void LoadSave()
+        {
+            var s = new MemoryStream();
+
+            m_Brain.Save(s);
+
+            s.Seek(0, SeekOrigin.Begin);
+
+            var b = Brain.Load(s);
+
+            Assert.That(m_Brain.Chains(), Is.EquivalentTo(b.Chains()));
         }
     }
 }
