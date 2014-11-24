@@ -27,6 +27,8 @@ namespace MibiHAL
 
                 var chain = PickChain(forwardCandidates);
 
+                if (chain == null) break;
+
                 output = output.Join(chain.Last(chain.Length - 1));
 
                 next = chain.Last(1);
@@ -39,6 +41,8 @@ namespace MibiHAL
                 var backwardCandidates = m_Brain.BackwardsCandidates(next);
 
                 var chain = PickChain(backwardCandidates);
+                
+                if (chain == null) break;
 
                 output = chain.First(chain.Length - 1).Join(output);
 
@@ -68,8 +72,8 @@ namespace MibiHAL
                     break;
                 }
             }
-            if (chain == null) chain = chains.Last();
-            return chain;
+
+            return chain ?? chains.LastOrDefault();
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NDesk.Options;
 
 namespace MibiHAL
 {
@@ -11,28 +12,44 @@ namespace MibiHAL
         {
             var r = new Random();
 
-            Brain b;
+            Brain b = null;
             ISymbol[] words;
+            string brainFilename = "brain.brn";
+            string trainFilename = String.Empty;
+            string outputBrain = String.Empty;
+
+            var o = new OptionSet()
+            {
+                {"b|brain=", v => brainFilename = v},
+                {"t|train=", v => trainFilename = v},
+                {"s|save=", v => outputBrain = v}
+            };
+
+            o.Parse(args);
 
             try
             {
-                using (var brainFile = new FileStream("brain.brn", FileMode.Open))
+                using (var brainFile = new FileStream(brainFilename, FileMode.Open))
                 {
                     b = Brain.Load(brainFile);
-                    words = b.Symbols.ToArray();
                 }
                 Console.WriteLine("Brain loaded!");
             }
             catch (FileNotFoundException)
             {
                 b = new Brain();
-                var set = Train(b, "train.txt");
-                words = set.ToArray();
+                Console.WriteLine("Empty brain created");
+            }
+
+
+            if (!String.IsNullOrEmpty(trainFilename))
+            {
+                var set = Train(b, trainFilename);
                 Console.WriteLine("Trained!");
             }
 
+            words = b.Symbols.ToArray();
             var chainBuilder = new ChainBuilder(b);
-
 
             Console.WriteLine();
 
@@ -51,7 +68,9 @@ namespace MibiHAL
                 Console.WriteLine();
             }
 
-            using (var saveBrain = new FileStream("brain.brn", FileMode.Create))
+            if (String.IsNullOrEmpty(outputBrain)) outputBrain = brainFilename;
+
+            using (var saveBrain = new FileStream(outputBrain, FileMode.Create))
             {
                 b.Save(saveBrain);
             }
@@ -80,8 +99,14 @@ namespace MibiHAL
                 words.Add(symbol);
             }
 
-            b.Train(symbols, 3);
-            b.Train(symbols, 5);
+            try
+            {
+                b.Train(symbols, 3);
+                b.Train(symbols, 5);
+            }
+            catch
+            {
+            }
         }
     }
 }
