@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ namespace MibiHAL
     {
         private readonly ISymbol[] m_Symbols;
         private int m_HashCode = -1;
+        private int m_Length = -1;
 
         public Chain(IEnumerable<ISymbol> symbols)
         {
@@ -22,7 +24,12 @@ namespace MibiHAL
 
         public int Length
         {
-            get { return Symbols.Count(); }
+            get
+            {
+                if (m_Length == -1)
+                    m_Length = m_Symbols.Count();
+                return m_Length;
+            }
         }
 
         public Chain Join(Chain other)
@@ -44,21 +51,22 @@ namespace MibiHAL
 
         public bool StartsWith(Chain chain)
         {
-            var symbols = chain.Symbols;
-            var enumerable = symbols as ISymbol[] ?? symbols.ToArray();
+            var enumerable = chain.Symbols.ToArray();
 
             var mine = Symbols.Take(enumerable.Length);
+
+            return SeqEquals(enumerable.GetEnumerator(), mine.GetEnumerator());
 
             return mine.Zip(enumerable, (s1, s2) => s1.Equals(s2)).All(eq => eq);
         }
 
         public bool EndsWith(Chain chain)
         {
-            var symbols = chain.Symbols;
-
-            var enumerable = symbols as ISymbol[] ?? symbols.ToArray();
+            var enumerable = chain.Symbols.ToArray();
 
             var mine = Symbols.Skip(Symbols.Count() - enumerable.Length);
+
+            return SeqEquals(enumerable.GetEnumerator(), mine.GetEnumerator());
 
             return mine.Zip(enumerable, (s1, s2) => s1.Equals(s2)).All(eq => eq);
         }
@@ -94,6 +102,11 @@ namespace MibiHAL
 
             var itr1 = Symbols.GetEnumerator();
             var itr2 = chain.Symbols.GetEnumerator();
+            return SeqEquals(itr1, itr2);
+        }
+
+        private static bool SeqEquals(IEnumerator itr1, IEnumerator itr2)
+        {
             do
             {
                 if (itr1.MoveNext() || itr2.MoveNext())
@@ -103,7 +116,6 @@ namespace MibiHAL
                 if (!itr1.Current.Equals(itr2.Current))
                     return false;
             } while (true);
-
             return true;
         }
 

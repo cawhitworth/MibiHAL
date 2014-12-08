@@ -114,9 +114,6 @@ namespace MibiHAL
 
         public int Score(Chain chain)
         {
-            if (!m_Chains.ContainsKey(chain))
-                throw new KeyNotFoundException();
-
             return m_Chains[chain];
         }
 
