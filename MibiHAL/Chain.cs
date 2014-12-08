@@ -46,14 +46,21 @@ namespace MibiHAL
         {
             var symbols = chain.Symbols;
             var enumerable = symbols as ISymbol[] ?? symbols.ToArray();
-            return First(enumerable.Count()).Symbols.Zip(enumerable, (s1, s2) => s1.Equals(s2)).All(eq => eq);
+
+            var mine = Symbols.Take(enumerable.Length);
+
+            return mine.Zip(enumerable, (s1, s2) => s1.Equals(s2)).All(eq => eq);
         }
 
         public bool EndsWith(Chain chain)
         {
             var symbols = chain.Symbols;
+
             var enumerable = symbols as ISymbol[] ?? symbols.ToArray();
-            return Last(enumerable.Count()).Symbols.Zip(enumerable, (s1, s2) => s1.Equals(s2)).All(eq => eq);
+
+            var mine = Symbols.Skip(Symbols.Count() - enumerable.Length);
+
+            return mine.Zip(enumerable, (s1, s2) => s1.Equals(s2)).All(eq => eq);
         }
 
         public IEnumerable<ISymbol> Symbols
