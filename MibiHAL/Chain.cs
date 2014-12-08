@@ -51,22 +51,21 @@ namespace MibiHAL
 
         public bool StartsWith(Chain chain)
         {
-            var enumerable = chain.Symbols.ToArray();
+            var symbols = chain.Symbols;
+            var enumerable = symbols as ISymbol[] ?? symbols.ToArray();
 
             var mine = Symbols.Take(enumerable.Length);
-
-            return SeqEquals(enumerable.GetEnumerator(), mine.GetEnumerator());
 
             return mine.Zip(enumerable, (s1, s2) => s1.Equals(s2)).All(eq => eq);
         }
 
         public bool EndsWith(Chain chain)
         {
-            var enumerable = chain.Symbols.ToArray();
+            var symbols = chain.Symbols;
+
+            var enumerable = symbols as ISymbol[] ?? symbols.ToArray();
 
             var mine = Symbols.Skip(Symbols.Count() - enumerable.Length);
-
-            return SeqEquals(enumerable.GetEnumerator(), mine.GetEnumerator());
 
             return mine.Zip(enumerable, (s1, s2) => s1.Equals(s2)).All(eq => eq);
         }
