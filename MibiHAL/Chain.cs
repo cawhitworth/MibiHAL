@@ -92,7 +92,19 @@ namespace MibiHAL
         {
             if (chain.Length != Length) return false;
 
-            return chain.Symbols.Zip(Symbols, (s1, s2) => s1.Equals(s2)).All(eq => eq);
+            var itr1 = Symbols.GetEnumerator();
+            var itr2 = chain.Symbols.GetEnumerator();
+            do
+            {
+                if (itr1.MoveNext() || itr2.MoveNext())
+                {
+                    break;
+                }
+                if (!itr1.Current.Equals(itr2.Current))
+                    return false;
+            } while (true);
+
+            return true;
         }
 
         public override string ToString()
