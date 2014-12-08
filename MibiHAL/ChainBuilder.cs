@@ -7,11 +7,12 @@ namespace MibiHAL
     class ChainBuilder
     {
         private readonly Brain m_Brain;
-        private readonly Random m_Random = new Random();
+        private readonly Random m_Random;
 
-        public ChainBuilder(Brain brain)
+        public ChainBuilder(Brain brain, Random random)
         {
             m_Brain = brain;
+            m_Random = random;
         }
 
         public Chain BuildChain(Chain starter)

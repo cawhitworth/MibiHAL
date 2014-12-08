@@ -8,15 +8,16 @@ namespace MibiHAL
 {
     class Program
     {
+        private const int SEED = 1;
+
         static void Main(string[] args)
         {
-            var r = new Random();
+            var r = new Random(SEED);
 
-            Brain b = null;
-            ISymbol[] words;
-            string brainFilename = "brain.brn";
-            string trainFilename = String.Empty;
-            string outputBrain = String.Empty;
+            Brain b;
+            var brainFilename = "brain.brn";
+            var trainFilename = String.Empty;
+            var outputBrain = String.Empty;
 
             var o = new OptionSet()
             {
@@ -48,8 +49,8 @@ namespace MibiHAL
                 Console.WriteLine("Trained!");
             }
 
-            words = b.Symbols.ToArray();
-            var chainBuilder = new ChainBuilder(b);
+            ISymbol[] words = b.Symbols.ToArray();
+            var chainBuilder = new ChainBuilder(b, r);
 
             Console.WriteLine();
 
